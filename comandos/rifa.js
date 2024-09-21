@@ -23,7 +23,7 @@ const rifaComando = async (sock, message, spinner) => {
     if (groupJid.includes("@g.us")) {
       const group = await sock.groupMetadata(groupJid);
       
-      spinner.info(`Comando '!rifa' solicitado no grupo: ${chalk.yellowBright(group.subject)}`).start();
+      spinner.info(`|| Comando '!rifa' solicitado no grupo: ${chalk.yellowBright(group.subject)}`).start();
 
       const rifaText = `
 ‼🚀 RIFA PRINCIPAL 🚀‼
@@ -76,7 +76,8 @@ Ramon Deckij Evers
         caption: rifaText // Define a legenda da imagem como o texto da rifa
       });
       
-      spinner.succeed("Informações da rifa e imagem enviadas com sucesso!").start("Esperando nova mensagem...");
+      spinner.succeed("|| Informações da rifa e imagem enviadas com sucesso!")
+      spinner.succeed("========================================").start("Esperando nova mensagem...\n");
     } else {
       spinner.warn("O comando '!rifa' foi enviado fora de um grupo.").start();
     }

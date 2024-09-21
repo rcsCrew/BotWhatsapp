@@ -24,7 +24,7 @@ const marcarComando = async (sock, message, spinner) => {
       const textMessage = message.message?.conversation || message.message?.extendedTextMessage?.text || "";
       
       if (textMessage.toLowerCase() === "!marcar") {
-        spinner.info(`Hidetag solicitado no grupo: ${chalk.underline.bold.yellowBright(group.subject)} (${groupParticipants.length} participantes)`).start();
+        spinner.info(`|| Hidetag solicitado no grupo: ${chalk.underline.bold.yellowBright(group.subject)} (${groupParticipants.length} participantes)`).start("Esperando nova mensagem...");
 
         try {
           await sock.sendMessage(groupJid, {
@@ -32,7 +32,7 @@ const marcarComando = async (sock, message, spinner) => {
             mentions: groupParticipants.map((item) => item.id),
           });
           
-          spinner.succeed("Hidetag enviado com sucesso!").start("Esperando nova mensagem...");
+          spinner.succeed("|| Hidetag enviado com sucesso!").start("Esperando nova mensagem...\n");
         } catch (error) {
           spinner.fail(`Falha ao enviar hidetag. Erro: ${error.toString()}`).start();
         }

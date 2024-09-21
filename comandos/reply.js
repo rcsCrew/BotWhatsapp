@@ -1,4 +1,6 @@
 import autorizados from './numeros.js'; // Ajuste o caminho conforme necessário
+import { writeFile } from 'fs/promises';
+import { downloadMediaMessage } from '@whiskeysockets/baileys';
 
 const replyComando = async (sock, message, spinner) => {
   if (!spinner) {
@@ -24,12 +26,27 @@ const replyComando = async (sock, message, spinner) => {
 
   // Verifica se a mensagem marcada contém uma imagem
   if (quotedMessage.imageMessage) {
-    const caption = quotedMessage.imageMessage.caption || "Imagem enviada!";
+    // Faz o download da imagem
+    const buffer = await downloadMediaMessage(
+      { message: quotedMessage },
+      'buffer',
+      {},
+      {
+        logger: console,
+        reuploadRequest: sock.updateMediaMessage,
+      }
+    );
+
+    // Salva a imagem em um arquivo temporário
+    const filePath = './tempImage.jpeg'; // Caminho temporário
+    await writeFile(filePath, buffer);
+
+    const caption = quotedMessage.imageMessage.caption || "";
 
     // Envia a imagem como resposta
     await sock.sendMessage(message.key.remoteJid, {
-      image: { url: quotedMessage.imageMessage.url }, // Usa a URL da imagem da mensagem original
-      caption: caption
+      image: { url: filePath }, // Usa o caminho do arquivo salvo
+      caption: caption,
     });
 
     spinner.succeed("✔ - Mensagem reply enviada com sucesso.");
